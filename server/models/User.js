@@ -34,20 +34,20 @@ const userSchema = new mongoose.Schema(
       unique: true,
     },
     phonenumber: {
-      type: Number,
-      required: true,
-      unique: true,
-      min: [10, "Phone number 10 digit allowed"],
-    },
-    email: {
       type: String,
       required: true,
       unique: true,
+      validate: {
+        validator: function (v) {
+          return /\d{10}/.test(v); // Check if it's a 10-digit number
+        },
+        message: props => `${props.value} is not a valid 10-digit phone number!`,
+      },
     },
     password: {
       type: String,
       required: true,
-      min: [8, "Password must be of length 8"],
+      minlength: [8, "Password must be at least 8 characters long"],
     },
     address: addressSchema,
     createdAt: {
@@ -63,10 +63,13 @@ const userSchema = new mongoose.Schema(
       default:
         "https://img.freepik.com/premium-vector/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.jpg?size=338&ext=jpg&ga=GA1.1.2113030492.1708819200&semt=ais",
     },
+    phoneVerificationCode: {
+      type: String,
+    }
   },
   { timestamps: true }
 );
 
-const User = mongoose.model("user", userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;
