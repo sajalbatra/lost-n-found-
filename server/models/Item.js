@@ -1,21 +1,21 @@
 import mongoose from "mongoose";
-//import User from "./user.model.js";
+import User from '../models/User.js';
 
 const itemSchema = new mongoose.Schema({
     itemimg: {
         type: String
     },
-    itemname:{
+    itemname: {
         type: String,
         required: true
     },
     itemtags: {
-        type: [String], 
-        validate: [ 
-            function(val) {
-                return val.length <= 5; 
+        type: [String],
+        validate: [
+            function (val) {
+                return val.length <= 5;
             },
-            '{PATH} exceeds the limit of 5' 
+            '{PATH} exceeds the limit of 5'
         ],
         required: true
     },
@@ -34,9 +34,20 @@ const itemSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
-    }
+    },
+    status: {
+        type: String,
+        enum: ["lost", "found"],
+        required: true
+    },
+    description: {
+        type: String
+    },
+    contact_info: {
+        type: String
+    },
 }, { timestamps: true });
 
-const ItemModel = mongoose.model("item", itemSchema);
+const Item = mongoose.model("Item", itemSchema);
 
-export default ItemModel;
+export default Item;
